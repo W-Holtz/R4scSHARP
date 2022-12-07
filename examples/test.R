@@ -1,5 +1,5 @@
 library(devtools)
-install_github("W-Holtz/R4scSHARP", force = TRUE)
+install_github("W-Holtz/R4scSHARP")
 library(R4scSHARP)
 
 # input vars
