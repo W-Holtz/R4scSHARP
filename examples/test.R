@@ -9,4 +9,5 @@ marker_path <- "splat_0.8/markers.txt"
 ref_path <- "splat_0.8/ref_counts.csv.gz"
 ref_label_path <- "splat_0.8/ref_labels.csv"
 
-output <- run_r4scsharp(data_path, out_path, marker_path, ref_path, ref_label_path)
+output <- run_r4scsharp(data_path, out_path, marker_path, 
+    ref_path, ref_label_path)
