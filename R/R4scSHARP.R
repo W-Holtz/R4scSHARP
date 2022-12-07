@@ -216,8 +216,22 @@ run <- function(data_path, tools, markers=NULL, marker_names=NULL, ref_path=NULL
   return(results_df)
 }
 
-# args: data path, out path, tools (comma separated), marker_path, ref_path, ref_label_path
-run_tools <- (data_path, out_path, marker_path, ref_path, ref_label_path, tools="scina,scsorter,sctype,singler,scpred")
+
+#' Run Script
+#'
+#' @param data_path path to gene expression matrix stored as csv
+#' @param out_path path to desired output save location
+#' @param marker_path path to marker genes for cell classification
+#' @param ref_path path to refrence dataset for predictions
+#' @param ref_labels_path path to refrence dataset labels
+#' @param tools tool you would like to run
+#' 
+#' @return compiled tool predictions
+#' @importFrom utils head read.csv
+#' @import Seurat
+#' @import dplyr
+#' @export
+run_tools <- function(data_path, out_path, marker_path, ref_path, ref_label_path, tools="scina,scsorter,sctype,singler,scpred")
   #data_path <- args[1]
   #out_path <- args[2]
   #tools <- args[3]
@@ -236,8 +250,8 @@ run_tools <- (data_path, out_path, marker_path, ref_path, ref_label_path, tools=
   print(marker_names)
   print(ref_path)
   results <- run(data_path, tools, markers, marker_names, ref_path, ref_label_path)
-
   write.csv(results, paste(out_path,"preds_att_marker_test.csv", sep=""))
+  return(results)
 
 }
 
