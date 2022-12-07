@@ -111,6 +111,7 @@ run_sctype <- function(data, markers=NULL, ref=NULL){
 #'
 #' @return SingleR predictions
 #' @importFrom Seurat GetAssayData
+#' @import SingleR
 #' @export
 run_singler <- function(data, ref, ref_labels){
   norm_counts <- as.matrix(GetAssayData(object = data, slot = "data"))
@@ -126,6 +127,7 @@ run_singler <- function(data, ref, ref_labels){
 #'
 #' @return scPred predictions
 #' @importFrom Seurat GetAssayData FindVariableFeatures ScaleData RunPCA RunUMAP AddMetaData
+#' @import scPred
 #' @export
 run_scpred <- function(data, ref, ref_labels){
   # can return "unassigned"
@@ -223,15 +225,15 @@ run <- function(data_path, tools, markers=NULL, marker_names=NULL, ref_path=NULL
 #' @param out_path path to desired output save location
 #' @param marker_path path to marker genes for cell classification
 #' @param ref_path path to refrence dataset for predictions
-#' @param ref_labels_path path to refrence dataset labels
+#' @param ref_label_path path to refrence dataset labels
 #' @param tools tool you would like to run
 #' 
 #' @return compiled tool predictions
-#' @importFrom utils head read.csv
+#' @importFrom utils head read.csv write.csv
 #' @import Seurat
 #' @import dplyr
 #' @export
-run_tools <- function(data_path, out_path, marker_path, ref_path, ref_label_path, tools="scina,scsorter,sctype,singler,scpred")
+run_tools <- function(data_path, out_path, marker_path, ref_path, ref_label_path, tools="scina,scsorter,sctype,singler,scpred") {
   #data_path <- args[1]
   #out_path <- args[2]
   #tools <- args[3]
@@ -254,6 +256,3 @@ run_tools <- function(data_path, out_path, marker_path, ref_path, ref_label_path
   return(results)
 
 }
-
-
-
