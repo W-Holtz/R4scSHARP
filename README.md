@@ -2,7 +2,7 @@
 
 ## Purpose:
   This R package was created as a supplementary package for a larger cell classification project, scSHARP
-  (find that repository here: https://github.com/lewinsohndp/scSHARP). R4scSHARP contains a number of helper 
+  (find that repository here: https://github.com/mperozek11/scSHARP_tool). R4scSHARP contains a number of helper 
   functions, but the main function, run_r4scsharp, is used to run up to five cell classification tools on a
   RNA gene expression matrix, then return the tool predictions in a succinct file.
   
