@@ -218,7 +218,6 @@ run <- function(data_path, tools, markers=NULL, marker_names=NULL, ref_path=NULL
 
 # args: data path, out path, tools (comma separated), marker_path, ref_path, ref_label_path
 run_tools <- (data_path, out_path, marker_path, ref_path, ref_label_path, tools="scina,scsorter,sctype,singler,scpred")
-if(length(args) > 2){
   #data_path <- args[1]
   #out_path <- args[2]
   #tools <- args[3]
