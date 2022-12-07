@@ -10,18 +10,18 @@
 #' @importFrom SCINA SCINA
 #' @importFrom Seurat GetAssayData
 #' @export
-run_scina <- function(data, markers=NULL, ref=NULL){
+run_scina <- function(data, markers = NULL, ref = NULL) {
   # can return "unknown"
 
-  if(is.null(markers)){
-    return(F)
+  if (is.null(markers)) {
+    return(FALSE)
   }
   print("Running SCINA")
   norm_counts <- GetAssayData(object = data, slot = "data")
-  results <- SCINA(norm_counts, markers, rm_overlap=F)
+  results <- SCINA(norm_counts, markers, rm_overlap = FALSE)
   scina_preds <- results$cell_labels
 
-  scina_preds = replace(scina_preds, scina_preds=="unknown", NA)
+  scina_preds <- replace(scina_preds, scina_preds == "unknown", NA)
   return(scina_preds)
 
 }
@@ -36,33 +36,33 @@ run_scina <- function(data, markers=NULL, ref=NULL){
 #' @importFrom scSorter scSorter
 #' @importFrom Seurat GetAssayData VariableFeatures
 #' @export
-run_scsorter <- function(data, markers=NULL, ref=NULL){
+run_scsorter <- function(data, markers = NULL, ref = NULL) {
   #need top variable genes
   #can return "Unknown"
 
-  if(is.null(markers)){
-    return(F)
+  if (is.null(markers)) {
+    return(FALSE)
   }
 
   print("Running scSorter")
   types <- list()
-  for(i in 1:length(names(markers))){
+  for (i in 1:length(names(markers))) {
     types <- append(types, rep(names(markers)[i], length(unlist(markers[i]))))
   }
 
   types <- unlist(types)
   markers <- unname(unlist(markers))
-  anno <- data.frame(Type=types, Marker=markers)
+  anno <- data.frame(Type = types, Marker = markers)
 
   topgenes <- head(VariableFeatures(data), 2000)
   picked_genes <- unique(c(topgenes, anno$Marker))
   #expr <- as.matrix(data@assays$RNA@data)
   expr <- as.matrix(GetAssayData(object = data, slot = "data"))
-  expr <- expr[rownames(expr) %in% picked_genes,]
+  expr <- expr[rownames(expr) %in% picked_genes]
 
   rts <- scSorter(expr, anno)
-  scsort_preds = rts$Pred_Type
-  scsort_preds = replace(scsort_preds, scsort_preds=="Unknown", NA)
+  scsort_preds <- rts$Pred_Type
+  scsort_preds <- replace(scsort_preds, scsort_preds == "Unknown", NA)
 
   return(scsort_preds)
 }
@@ -76,29 +76,38 @@ run_scsorter <- function(data, markers=NULL, ref=NULL){
 #' @return scType predictions
 #' @importFrom Seurat GetAssayData VariableFeatures
 #' @export
-run_sctype <- function(data, markers=NULL, ref=NULL){
-  if(is.null(markers)){
-    return(F)
+run_sctype <- function(data, markers = NULL, ref = NULL) {
+  if (is.null(markers)) {
+    return(FALSE)
   }
   print("Running scType")
-  source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/gene_sets_prepare.R")
-  source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_score_.R")
+  source("https://raw.githubusercontent.com/IanevskiAleksandr
+    /sc-type/master/R/gene_sets_prepare.R")
+  source("https://raw.githubusercontent.com/IanevskiAleksandr
+    /sc-type/master/R/sctype_score_.R")
   norm_counts <- as.matrix(GetAssayData(object = data, slot = "data"))
-  es.max = sctype_score(scRNAseqData = norm_counts, scaled = F,
-                        gs = markers, gs2 = NULL, gene_names_to_uppercase = F)
-  cL_resutls = do.call("rbind", lapply(unique(data@meta.data$seurat_clusters), function(cl){
-    es.max.cl = sort(rowSums(es.max[ ,rownames(data@meta.data[data@meta.data$seurat_clusters==cl, ])]), decreasing = !0)
-    head(data.frame(cluster = cl, type = names(es.max.cl), scores = es.max.cl, ncells = sum(data@meta.data$seurat_clusters==cl)), 10)
-  }))
-  sctype_scores = cL_resutls %>% group_by(cluster) %>% top_n(n = 1, wt = scores)
-  sctype_scores$type[as.numeric(as.character(sctype_scores$scores)) < sctype_scores$ncells/4] = NA
+  es.max <- sctype_score(scRNAseqData = norm_counts, scaled = FALSE,
+              gs = markers, gs2 = NULL, gene_names_to_uppercase = FALSE)
+  cL_resutls <- do.call("rbind", lapply(unique(data@meta.data$seurat_clusters),
+    function(cl) {
 
-  for(j in unique(sctype_scores$cluster)){
-    cl_type = sctype_scores[sctype_scores$cluster==j,];
-    data@meta.data$customclassif[data@meta.data$seurat_clusters == j] = as.character(cl_type$type[1])
+    es.max.cl <- sort(rowSums(es.max[, rownames(
+      data@meta.data[data@meta.data$seurat_clusters == cl])]), decreasing = !0)
+    head(data.frame(cluster = cl, type = names(es.max.cl), scores = es.max.cl,
+      ncells = sum(data@meta.data$seurat_clusters == cl)), 10)
+  }))
+
+  sctype_scores = cL_resutls %>% group_by(cluster) %>% top_n(n = 1, wt = scores)
+  sctype_scores$type[as.numeric(as.character(sctype_scores$scores)) <
+    sctype_scores$ncells/4] = NA
+
+  for (j in unique(sctype_scores$cluster)) {
+    cl_type <- sctype_scores[sctype_scores$cluster==j]
+    data@meta.data$customclassif[data@meta.data$seurat_clusters == j] <-
+      as.character(cl_type$type[1])
   }
 
-  sctype_preds = data$customclassif
+  sctype_preds <- data$customclassif
 
   return(sctype_preds)
 }
@@ -113,9 +122,10 @@ run_sctype <- function(data, markers=NULL, ref=NULL){
 #' @importFrom Seurat GetAssayData
 #' @import SingleR
 #' @export
-run_singler <- function(data, ref, ref_labels){
+run_singler <- function(data, ref, ref_labels) {
   norm_counts <- as.matrix(GetAssayData(object = data, slot = "data"))
-  results <- SingleR(norm_counts, as.matrix(ref@assays$RNA@data), ref_labels[,1])
+  results <- SingleR(norm_counts, as.matrix(ref@assays$RNA@data),
+    ref_labels[, 1])
   return(results$pruned.labels)
 }
 
@@ -126,22 +136,23 @@ run_singler <- function(data, ref, ref_labels){
 #' @param ref_labels labels of refrence dataset
 #'
 #' @return scPred predictions
-#' @importFrom Seurat GetAssayData FindVariableFeatures ScaleData RunPCA RunUMAP AddMetaData
+#' @importFrom Seurat GetAssayData FindVariableFeatures ScaleData
+#' RunPCA RunUMAP AddMetaData
 #' @import scPred
 #' @export
-run_scpred <- function(data, ref, ref_labels){
+run_scpred <- function(data, ref, ref_labels) {
   # can return "unassigned"
   ref <- FindVariableFeatures(ref)
   ref <- ScaleData(ref)
   ref <- RunPCA(ref)
-  ref <- RunUMAP(ref, dims=1:30)
-  ref <- AddMetaData(ref, ref_labels, col.name="celltype")
+  ref <- RunUMAP(ref, dims = 1:30)
+  ref <- AddMetaData(ref, ref_labels, col.name = "celltype")
   ref <- scPred::getFeatureSpace(ref, "celltype")
   ref <- scPred::trainModel(ref)
   data <- scPred::scPredict(data, ref)
 
-  scpreds = data$scpred_prediction
-  scpreds = replace(scpreds, scpreds=="unassigned", NA)
+  scpreds <- data$scpred_prediction
+  scpreds <- replace(scpreds, scpreds == "unassigned", NA)
 
   return(scpreds)
 }
@@ -149,25 +160,30 @@ run_scpred <- function(data, ref, ref_labels){
 #' Run Component Tools (Scina, scSorter, scType, scPred, Singler)
 #'
 #' @param data_path path to gene expression matrix stored as csv
-#' @param tools TODO
+#' @param tools tool you would like to run
+#' @param min_cells filters data so cells with a sample size less then the
+#' given amount are ignored (value is 0 by default)
+#' @param min_feats filters data so features with a sample size less then the
+#' given amount are ignored (value is 0 by default)
 #' @param markers marker genes for cell classification
-#' @param marker_names TODO
+#' @param marker_names names of the marker genes
 #' @param ref_path path to refrence dataset for predictions
 #' @param ref_labels_path path to refrence dataset labels
-#' 
+#'
 #' @return compiled tool predictions
 #' @importFrom utils head read.csv
 #' @import Seurat
 #' @import dplyr
 #' @export
-run <- function(data_path, tools, markers=NULL, marker_names=NULL, ref_path=NULL, ref_labels_path=NULL){
+run_tools <- function(data_path, tools, min_cells, min_feats, markers = NULL,
+  marker_names = NULL, ref_path = NULL, ref_labels_path = NULL) {
   # add ability to take in seurat counts object
 
   #set.seed(25)
-  counts <- read.csv(data_path, header=T, row.names = 1)
+  counts <- read.csv(data_path, header = TRUE, row.names = 1)
   print(dim(counts))
-  data <- CreateSeuratObject(t(counts), min.cells=3, min.features=200)
-  #data <- CreateSeuratObject(t(counts))
+  data <- CreateSeuratObject(t(counts), min.cells = min_cells,
+    min.features = min_feats)
   print(dim(data@assays$RNA@counts))
   data <- NormalizeData(data)
   data <- ScaleData(data)
@@ -186,34 +202,34 @@ run <- function(data_path, tools, markers=NULL, marker_names=NULL, ref_path=NULL
   tools <- unlist(tools)
   #markers <- list(Group1=c("Gene1","Gene3"), Group2=c("Gene2"))
   #print(markers)
-  results_df <- data.frame(start=rep(0,ncol(x = data)))
+  results_df <- data.frame(start = rep(0, ncol(x = data)))
   #print(row.names(data@assays$RNA@data))
-  if("scina" %in% tools){
+  if ("scina" %in% tools) {
     results_df$scina <- run_scina(data, markers)
   }
-  if("scsorter" %in% tools){
+  if ("scsorter" %in% tools) {
     results_df$scsorter <- run_scsorter(data, markers)
   }
-  if("sctype" %in% tools){
+  if ("sctype" %in% tools) {
     results_df$sctype <- run_sctype(data, markers)
   }
 
-  if((!is.null(ref_path)) & (!is.na(ref_path))){
-    ref_counts <- read.csv(ref_path, header=T, row.names = 1)
-    ref_labels = read.csv(ref_labels_path, header=T, row.names=1)
+  if ((!is.null(ref_path)) && (!is.na(ref_path))) {
+    ref_counts <- read.csv(ref_path, header = TRUE, row.names = 1)
+    ref_labels <- read.csv(ref_labels_path, header = TRUE, row.names = 1)
     ref <- CreateSeuratObject(t(ref_counts))
     ref <- NormalizeData(ref)
 
-    if("singler" %in% tools){
+    if ("singler" %in% tools) {
       results_df$singler <- run_singler(data, ref, ref_labels)
     }
-    if("scpred" %in% tools){
+    if ("scpred" %in% tools) {
       results_df$scpred <- run_scpred(data, ref, ref_labels)
     }
 
   }
 
-  results_df = results_df[-1]
+  results_df <- results_df[-1]
   row.names(results_df) <- row.names(data@meta.data)
   return(results_df)
 }
@@ -226,33 +242,35 @@ run <- function(data_path, tools, markers=NULL, marker_names=NULL, ref_path=NULL
 #' @param marker_path path to marker genes for cell classification
 #' @param ref_path path to refrence dataset for predictions
 #' @param ref_label_path path to refrence dataset labels
-#' @param tools tool you would like to run
-#' 
+#' @param tools tools you would like to run (runs all tools by default)
+#' @param min_cells filters data so cells with a sample size less then the
+#' given amount are ignored (value is 0 by default)
+#' @param min_feats filters data so features with a sample size less then the
+#' given amount are ignored (value is 0 by default)
+#'
 #' @return compiled tool predictions
 #' @importFrom utils head read.csv write.csv
 #' @import Seurat
 #' @import dplyr
 #' @export
-run_tools <- function(data_path, out_path, marker_path, ref_path, ref_label_path, tools="scina,scsorter,sctype,singler,scpred") {
-  #data_path <- args[1]
-  #out_path <- args[2]
-  #tools <- args[3]
-  #marker_path <- args[4]
-  #ref_path <- args[5]
-  #ref_label_path <- args[6]
+run_r4scsharp <- function(data_path, out_path, marker_path,
+  ref_path, ref_label_path, tools = "scina,scsorter,sctype,singler,scpred",
+  min_cells = 0, min_feats = 0) {
 
-  tools <- unlist(strsplit(tools,","))
+  tools <- unlist(strsplit(tools, ","))
 
   print(tools)
-  marker_df <- read.csv(marker_path, header=F, row.names = 1)
+  marker_df <- read.csv(marker_path, header = FALSE, row.names = 1)
   markers <- as.list(as.data.frame(t(marker_df)))
-  markers <- lapply(markers, function(z){ z[!is.na(z) & z != ""]})
+  markers <- lapply(markers, function(z) {
+    z[!is.na(z) & z != ""]
+    })
   marker_names <- row.names(marker_df)
   print(markers)
   print(marker_names)
   print(ref_path)
-  results <- run(data_path, tools, markers, marker_names, ref_path, ref_label_path)
-  write.csv(results, paste(out_path,"preds_att_marker_test.csv", sep=""))
+  results <- run_tools(data_path, tools, min_cells, min_feats,
+    markers, marker_names, ref_path, ref_label_path)
+  write.csv(results, paste(out_path, "preds_att_marker_test.csv", sep = ""))
   return(results)
-
 }

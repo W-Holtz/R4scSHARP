@@ -2,33 +2,41 @@
 % Please edit documentation in R/R4scSHARP.R
 \name{run_tools}
 \alias{run_tools}
-\title{Run Script}
+\title{Run Component Tools (Scina, scSorter, scType, scPred, Singler)}
 \usage{
 run_tools(
   data_path,
-  out_path,
-  marker_path,
-  ref_path,
-  ref_label_path,
-  tools = "scina,scsorter,sctype,singler,scpred"
+  tools,
+  min_cells,
+  min_feats,
+  markers = NULL,
+  marker_names = NULL,
+  ref_path = NULL,
+  ref_labels_path = NULL
 )
 }
 \arguments{
 \item{data_path}{path to gene expression matrix stored as csv}
 
-\item{out_path}{path to desired output save location}
+\item{tools}{tool you would like to run}
 
-\item{marker_path}{path to marker genes for cell classification}
+\item{min_cells}{filters data so cells with a sample size less then the
+given amount are ignored (value is 0 by default)}
+
+\item{min_feats}{filters data so features with a sample size less then the
+given amount are ignored (value is 0 by default)}
+
+\item{markers}{marker genes for cell classification}
+
+\item{marker_names}{names of the marker genes}
 
 \item{ref_path}{path to refrence dataset for predictions}
 
-\item{ref_label_path}{path to refrence dataset labels}
-
-\item{tools}{tool you would like to run}
+\item{ref_labels_path}{path to refrence dataset labels}
 }
 \value{
 compiled tool predictions
 }
 \description{
-Run Script
+Run Component Tools (Scina, scSorter, scType, scPred, Singler)
 }
