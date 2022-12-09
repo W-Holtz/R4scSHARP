@@ -2,20 +2,20 @@
 % Please edit documentation in R/R4scSHARP.R
 \name{run_singler}
 \alias{run_singler}
-\title{Run Singler}
+\title{Runs Singler}
 \usage{
 run_singler(data, ref, ref_labels)
 }
 \arguments{
-\item{data}{gene expression matrix}
+\item{data}{Gene expression matrix}
 
-\item{ref}{refrence dataset for predictions}
+\item{ref}{Refrence dataset for predictions}
 
-\item{ref_labels}{labels of refrence dataset}
+\item{ref_labels}{Labels of refrence dataset}
 }
 \value{
-SingleR predictions
+Returns SingleR predictions as an R data frame
 }
 \description{
-Run Singler
+Runs Singler
 }

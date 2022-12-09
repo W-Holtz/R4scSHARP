@@ -1,12 +1,10 @@
-#' Runs scSHARP Prediction Toolsdocu
-
-#' Run Scina
+#' Runs Scina
 #'
-#' @param data gene expression matrix
-#' @param markers marker genes for cell classification
-#' @param ref refrence dataset for predictions.
+#' @param data Gene expression matrix
+#' @param markers Marker genes for cell classification
+#' @param ref Refrence dataset for predictions.
 #'
-#' @return scina predictions
+#' @return Returns Scina predictions as an R data frame
 #' @importFrom SCINA SCINA
 #' @importFrom Seurat GetAssayData
 #' @export
@@ -26,13 +24,13 @@ run_scina <- function(data, markers = NULL, ref = NULL) {
 
 }
 
-#' Run scSorter
+#' Runs scSorter
 #'
-#' @param data gene expression matrix
-#' @param markers marker genes for cell classification
-#' @param ref refrence dataset for predictions.
+#' @param data Gene expression matrix
+#' @param markers Marker genes for cell classification
+#' @param ref Refrence dataset for predictions.
 #'
-#' @return scSorter predictions
+#' @return Returns scSorter predictions as an R data frame
 #' @importFrom scSorter scSorter
 #' @importFrom Seurat GetAssayData VariableFeatures
 #' @export
@@ -67,13 +65,13 @@ run_scsorter <- function(data, markers = NULL, ref = NULL) {
   return(scsort_preds)
 }
 
-#' Run scType
+#' Runs scType
 #'
-#' @param data gene expression matrix
-#' @param markers marker genes for cell classification
-#' @param ref refrence dataset for predictions.
+#' @param data Gene expression matrix
+#' @param markers Marker genes for cell classification
+#' @param ref Refrence dataset for predictions.
 #'
-#' @return scType predictions
+#' @return Returns scType predictions as an R data frame
 #' @importFrom Seurat GetAssayData VariableFeatures
 #' @export
 run_sctype <- function(data, markers = NULL, ref = NULL) {
@@ -81,10 +79,8 @@ run_sctype <- function(data, markers = NULL, ref = NULL) {
     return(FALSE)
   }
   print("Running scType")
-  source("https://raw.githubusercontent.com/IanevskiAleksandr
-    /sc-type/master/R/gene_sets_prepare.R")
-  source("https://raw.githubusercontent.com/IanevskiAleksandr
-    /sc-type/master/R/sctype_score_.R")
+  source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/gene_sets_prepare.R")
+  source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_score_.R")
   norm_counts <- as.matrix(GetAssayData(object = data, slot = "data"))
   es.max <- sctype_score(scRNAseqData = norm_counts, scaled = FALSE,
               gs = markers, gs2 = NULL, gene_names_to_uppercase = FALSE)
@@ -112,13 +108,13 @@ run_sctype <- function(data, markers = NULL, ref = NULL) {
   return(sctype_preds)
 }
 
-#' Run Singler
+#' Runs Singler
 #'
-#' @param data gene expression matrix
-#' @param ref  refrence dataset for predictions
-#' @param ref_labels labels of refrence dataset
+#' @param data Gene expression matrix
+#' @param ref  Refrence dataset for predictions
+#' @param ref_labels Labels of refrence dataset
 #'
-#' @return SingleR predictions
+#' @return Returns SingleR predictions as an R data frame
 #' @importFrom Seurat GetAssayData
 #' @import SingleR
 #' @export
@@ -129,13 +125,13 @@ run_singler <- function(data, ref, ref_labels) {
   return(results$pruned.labels)
 }
 
-#' Run scPred
+#' Runs scPred
 #'
-#' @param data gene expression matrix
-#' @param ref  refrence dataset for predictions
-#' @param ref_labels labels of refrence dataset
+#' @param data Gene expression matrix
+#' @param ref Refrence dataset for predictions
+#' @param ref_labels Labels of refrence dataset
 #'
-#' @return scPred predictions
+#' @return Returns scPred predictions as an R data frame
 #' @importFrom Seurat GetAssayData FindVariableFeatures ScaleData
 #' RunPCA RunUMAP AddMetaData
 #' @import scPred
@@ -158,19 +154,22 @@ run_scpred <- function(data, ref, ref_labels) {
 }
 
 #' Run Component Tools (Scina, scSorter, scType, scPred, Singler)
-#'
-#' @param data_path path to gene expression matrix stored as csv
-#' @param tools tool you would like to run
-#' @param min_cells filters data so cells with a sample size less then the
+#' @description This function runs up to five cell classification
+#' tools (SCINA, scSorter, scType, SingleR, and scPred) on an gene
+#' expression matrix and returns the compiled predictions.
+#' @param data_path Path to gene expression matrix stored as csv
+#' @param tools Tool you would like to run
+#' @param min_cells Filters data so cells with a sample size less then the
 #' given amount are ignored (value is 0 by default)
-#' @param min_feats filters data so features with a sample size less then the
+#' @param min_feats Filters data so features with a sample size less then the
 #' given amount are ignored (value is 0 by default)
-#' @param markers marker genes for cell classification
-#' @param marker_names names of the marker genes
-#' @param ref_path path to refrence dataset for predictions
-#' @param ref_labels_path path to refrence dataset labels
+#' @param markers Marker genes for cell classification
+#' @param marker_names Names of the marker genes
+#' @param ref_path Path to refrence dataset for predictions
+#' @param ref_labels_path Path to refrence dataset labels
 #'
-#' @return compiled tool predictions
+#' @return Returns the tool predictions in a single R data frame object
+#' where the rows are cells, and the columns are tool prediction output values.
 #' @importFrom utils head read.csv
 #' @import Seurat
 #' @import dplyr
@@ -193,7 +192,7 @@ run_tools <- function(data_path, tools, min_cells, min_feats, markers = NULL,
   data <- FindClusters(data)
 
   markers <- unname(markers)
-  for(i in 1:length(markers)){
+  for (i in 1:length(markers)){
     markers[i] <- list(unlist(markers[i]))
   }
 
@@ -235,20 +234,32 @@ run_tools <- function(data_path, tools, min_cells, min_feats, markers = NULL,
 }
 
 
-#' Run Script
-#'
-#' @param data_path path to gene expression matrix stored as csv
-#' @param out_path path to desired output save location
-#' @param marker_path path to marker genes for cell classification
-#' @param ref_path path to refrence dataset for predictions
-#' @param ref_label_path path to refrence dataset labels
-#' @param tools tools you would like to run (runs all tools by default)
-#' @param min_cells filters data so cells with a sample size less then the
+#' R4scSHARP
+#' @description This function is the primary function in the R4scSHARP
+#' package. It calls another tool to run up to five cell classification
+#' tools (SCINA, scSorter, scType, SingleR, and scPred) on an gene
+#' expression matrix and saves the output file so scSHARP can run
+#' predictions using that information.
+#' @param data_path Path represented as a string to gene expression
+#' matrix (or DGE matrix) stored as csv.
+#' @param out_path Path represented as a string to desired location for
+#' the results to be saved.
+#' @param marker_path Path represented as a string to marker genes
+#' for cell classification
+#' @param ref_path Path represented as a string to refrence dataset
+#' for predictions
+#' @param ref_label_path Path represented as a string to refrence
+#' dataset labels
+#' @param tools Tools you would like to run (runs all tools by default).
+#'   Example Inputs:  "scina,scpred,singler", "sctype"
+#' @param min_cells Filters data so cells with a sample size less then the
 #' given amount are ignored (value is 0 by default)
-#' @param min_feats filters data so features with a sample size less then the
+#' @param min_feats Filters data so features with a sample size less then the
 #' given amount are ignored (value is 0 by default)
 #'
-#' @return compiled tool predictions
+#' @return Returns the tool predictions in a single R data frame object
+#' where the rows are cells, and the columns are tool prediction output values.
+#' Save the returned data frame as a csv to a given output location.
 #' @importFrom utils head read.csv write.csv
 #' @import Seurat
 #' @import dplyr

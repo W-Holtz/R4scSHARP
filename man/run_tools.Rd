@@ -16,27 +16,30 @@ run_tools(
 )
 }
 \arguments{
-\item{data_path}{path to gene expression matrix stored as csv}
+\item{data_path}{Path to gene expression matrix stored as csv}
 
-\item{tools}{tool you would like to run}
+\item{tools}{Tool you would like to run}
 
-\item{min_cells}{filters data so cells with a sample size less then the
+\item{min_cells}{Filters data so cells with a sample size less then the
 given amount are ignored (value is 0 by default)}
 
-\item{min_feats}{filters data so features with a sample size less then the
+\item{min_feats}{Filters data so features with a sample size less then the
 given amount are ignored (value is 0 by default)}
 
-\item{markers}{marker genes for cell classification}
+\item{markers}{Marker genes for cell classification}
 
-\item{marker_names}{names of the marker genes}
+\item{marker_names}{Names of the marker genes}
 
-\item{ref_path}{path to refrence dataset for predictions}
+\item{ref_path}{Path to refrence dataset for predictions}
 
-\item{ref_labels_path}{path to refrence dataset labels}
+\item{ref_labels_path}{Path to refrence dataset labels}
 }
 \value{
-compiled tool predictions
+Returns the tool predictions in a single R data frame object
+where the rows are cells, and the columns are tool prediction output values.
 }
 \description{
-Run Component Tools (Scina, scSorter, scType, scPred, Singler)
+This function runs up to five cell classification
+tools (SCINA, scSorter, scType, SingleR, and scPred) on an gene
+expression matrix and returns the compiled predictions.
 }

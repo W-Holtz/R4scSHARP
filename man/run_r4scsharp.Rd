@@ -2,7 +2,7 @@
 % Please edit documentation in R/R4scSHARP.R
 \name{run_r4scsharp}
 \alias{run_r4scsharp}
-\title{Run Script}
+\title{R4scSHARP}
 \usage{
 run_r4scsharp(
   data_path,
@@ -16,27 +16,39 @@ run_r4scsharp(
 )
 }
 \arguments{
-\item{data_path}{path to gene expression matrix stored as csv}
+\item{data_path}{Path represented as a string to gene expression
+matrix (or DGE matrix) stored as csv.}
 
-\item{out_path}{path to desired output save location}
+\item{out_path}{Path represented as a string to desired location for
+the results to be saved.}
 
-\item{marker_path}{path to marker genes for cell classification}
+\item{marker_path}{Path represented as a string to marker genes
+for cell classification}
 
-\item{ref_path}{path to refrence dataset for predictions}
+\item{ref_path}{Path represented as a string to refrence dataset
+for predictions}
 
-\item{ref_label_path}{path to refrence dataset labels}
+\item{ref_label_path}{Path represented as a string to refrence
+dataset labels}
 
-\item{tools}{tools you would like to run (runs all tools by default)}
+\item{tools}{Tools you would like to run (runs all tools by default).
+Example Inputs:  "scina,scpred,singler", "sctype"}
 
-\item{min_cells}{filters data so cells with a sample size less then the
+\item{min_cells}{Filters data so cells with a sample size less then the
 given amount are ignored (value is 0 by default)}
 
-\item{min_feats}{filters data so features with a sample size less then the
+\item{min_feats}{Filters data so features with a sample size less then the
 given amount are ignored (value is 0 by default)}
 }
 \value{
-compiled tool predictions
+Returns the tool predictions in a single R data frame object
+where the rows are cells, and the columns are tool prediction output values.
+Save the returned data frame as a csv to a given output location.
 }
 \description{
-Run Script
+This function is the primary function in the R4scSHARP
+package. It calls another tool to run up to five cell classification
+tools (SCINA, scSorter, scType, SingleR, and scPred) on an gene
+expression matrix and saves the output file so scSHARP can run
+predictions using that information.
 }

@@ -2,20 +2,20 @@
 % Please edit documentation in R/R4scSHARP.R
 \name{run_scpred}
 \alias{run_scpred}
-\title{Run scPred}
+\title{Runs scPred}
 \usage{
 run_scpred(data, ref, ref_labels)
 }
 \arguments{
-\item{data}{gene expression matrix}
+\item{data}{Gene expression matrix}
 
-\item{ref}{refrence dataset for predictions}
+\item{ref}{Refrence dataset for predictions}
 
-\item{ref_labels}{labels of refrence dataset}
+\item{ref_labels}{Labels of refrence dataset}
 }
 \value{
-scPred predictions
+Returns scPred predictions as an R data frame
 }
 \description{
-Run scPred
+Runs scPred
 }

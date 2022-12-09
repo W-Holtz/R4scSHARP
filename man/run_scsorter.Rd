@@ -2,20 +2,20 @@
 % Please edit documentation in R/R4scSHARP.R
 \name{run_scsorter}
 \alias{run_scsorter}
-\title{Run scSorter}
+\title{Runs scSorter}
 \usage{
 run_scsorter(data, markers = NULL, ref = NULL)
 }
 \arguments{
-\item{data}{gene expression matrix}
+\item{data}{Gene expression matrix}
 
-\item{markers}{marker genes for cell classification}
+\item{markers}{Marker genes for cell classification}
 
-\item{ref}{refrence dataset for predictions.}
+\item{ref}{Refrence dataset for predictions.}
 }
 \value{
-scSorter predictions
+Returns scSorter predictions as an R data frame
 }
 \description{
-Run scSorter
+Runs scSorter
 }
