@@ -56,7 +56,7 @@ run_scsorter <- function(data, markers = NULL, ref = NULL) {
   picked_genes <- unique(c(topgenes, anno$Marker))
   #expr <- as.matrix(data@assays$RNA@data)
   expr <- as.matrix(GetAssayData(object = data, slot = "data"))
-  expr <- expr[rownames(expr) %in% picked_genes]
+  expr <- expr[rownames(expr) %in% picked_genes, ]
 
   rts <- scSorter(expr, anno)
   scsort_preds <- rts$Pred_Type
@@ -82,15 +82,11 @@ run_sctype <- function(data, markers = NULL, ref = NULL) {
   source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/gene_sets_prepare.R")
   source("https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/R/sctype_score_.R")
   norm_counts <- as.matrix(GetAssayData(object = data, slot = "data"))
-  es.max <- sctype_score(scRNAseqData = norm_counts, scaled = FALSE,
-              gs = markers, gs2 = NULL, gene_names_to_uppercase = FALSE)
-  cL_resutls <- do.call("rbind", lapply(unique(data@meta.data$seurat_clusters),
-    function(cl) {
-
-    es.max.cl <- sort(rowSums(es.max[, rownames(
-      data@meta.data[data@meta.data$seurat_clusters == cl])]), decreasing = !0)
-    head(data.frame(cluster = cl, type = names(es.max.cl), scores = es.max.cl,
-      ncells = sum(data@meta.data$seurat_clusters == cl)), 10)
+  es.max = sctype_score(scRNAseqData = norm_counts, scaled = F,
+                        gs = markers, gs2 = NULL, gene_names_to_uppercase = F)
+  cL_resutls = do.call("rbind", lapply(unique(data@meta.data$seurat_clusters), function(cl){
+    es.max.cl = sort(rowSums(es.max[ ,rownames(data@meta.data[data@meta.data$seurat_clusters==cl, ])]), decreasing = !0)
+    head(data.frame(cluster = cl, type = names(es.max.cl), scores = es.max.cl, ncells = sum(data@meta.data$seurat_clusters==cl)), 10)
   }))
 
   sctype_scores = cL_resutls %>% group_by(cluster) %>% top_n(n = 1, wt = scores)
