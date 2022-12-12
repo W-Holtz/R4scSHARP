@@ -94,7 +94,7 @@ run_sctype <- function(data, markers = NULL, ref = NULL) {
     sctype_scores$ncells/4] = NA
 
   for (j in unique(sctype_scores$cluster)) {
-    cl_type <- sctype_scores[sctype_scores$cluster==j]
+    cl_type <- sctype_scores[sctype_scores$cluster==j, ]
     data@meta.data$customclassif[data@meta.data$seurat_clusters == j] <-
       as.character(cl_type$type[1])
   }
