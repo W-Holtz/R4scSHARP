@@ -278,6 +278,6 @@ run_r4scsharp <- function(data_path, out_path, marker_path,
   print(ref_path)
   results <- run_tools(data_path, tools, min_cells, min_feats,
     markers, marker_names, ref_path, ref_label_path)
-  write.csv(results, paste(out_path, "preds_att_marker_test.csv", sep = ""))
+  write.csv(results, out_path)
   return(results)
 }

@@ -1,0 +1,70 @@
+---
+title: "R4scSHARP"
+author: "W-Holtz"
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteIndexEntry{R4scSHARP}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# R4scSHARP
+
+## Purpose:
+
+The purpose of this document is primarily to get users acquainted with the tool R4scSHARP. One should not that this tool is not the primary functionality for the scSHARP project. Instead this is a component tool that will, in an ideal world, run primarily through the use of the python tool. If however, one would like to learn run this component separately, this is the vignette for them!
+
+## Setup
+
+To setup, one must first install and load the following packages.
+
+```{r}
+# specify any repo here
+install.packages("devtools", repos = "http://cran.us.r-project.org")
+library(devtools)
+# the package is also available on CRAN, but doesn't install all dependencies
+install_github("W-Holtz/R4scSHARP", )
+library(R4scSHARP)
+```
+
+## Basics
+
+Lets run through a simple example with the tool.
+
+First let's setup our input variables.
+
+```{r}
+data_path <- "splat_0.8/query_counts.csv.gz"
+out_path <- "output"
+marker_path <- "splat_0.8/markers.txt"
+ref_path <- "splat_0.8/ref_counts.csv.gz"
+ref_label_path <- "splat_0.8/ref_labels.csv"
+```
+
+The above variables are all of the required input parameters, but there are more parameters at our disposal then just paths:
+
+-   tools:  Tools you would like to run (runs all five tools by default). Example Inputs: "scina,scpred,singler", "sctype", or "scsorter"
+-   min_cells:  Filters data so cells with a sample size less then the given amount are ignored (value is 0 by default)
+-   min_feats:  Filters data so features with a sample size less then the given amount are ignored (value is 0 by default)
+
+
+To run the tools, call the function:
+
+```{r, include = FALSE}
+output <- run_r4scsharp(data_path, out_path, marker_path, ref_path,
+    ref_label_path)
+```
+
+```{r}
+# prints the first five columns
+print(head(output, 5))
+```
+
+The function returns the predictions from each tool as a data frame object in R if you'd like to print it out or play around with it more. It also will save the output to your given "out_path".
