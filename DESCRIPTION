@@ -1,30 +1,36 @@
 Package: R4scSHARP
 Title: Supplementary R Tools for scSHARP
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
     person("William", "Holtz", , "willholtz2001@gmail.com", role = c("aut", "cre")),
-    person("Daniel", "Lewinsohn", , role = c("aut"))
-    )
-Description: scSHARP is a robust software package used to classify single cells by cell 
-    type based on their transcriptomic profile generated from single-cell RNA sequencing. 
-    Intended for use by technically savvy research biologists, but perhaps available to a less 
-    technically proficient audience, our tool will be built with ease of use in mind. scSHARP 
-    would also serve as a research tool in its own right, helping users interpret their 
-    classification results with helpful models and figures. This document contains the 
-    nontechnical information and purpose of scSHARP.
+    person("Daniel", "Lewinsohn", role = "aut")
+  )
+Description: scSHARP is a robust software package used to classify single
+    cells by cell type based on their transcriptomic profile generated
+    from single-cell RNA sequencing.  Intended for use by technically
+    savvy research biologists, but perhaps available to a less technically
+    proficient audience, our tool will be built with ease of use in mind.
+    scSHARP would also serve as a research tool in its own right, helping
+    users interpret their classification results with helpful models and
+    figures. This document contains the nontechnical information andbuild_vignettes()
+    purpose of scSHARP.
 License: GPL (>= 3)
+URL: https://github.com/W-Holtz
+Imports: 
+    dplyr,
+    Seurat,
+    utils
+Suggests:
+    knitr,
+    rmarkdown,
+    SCINA,
+    scSorter,
+    scPred,
+    SingleR
+Additional_repositories: 
+    https://github.com/powellgenomicslab/scPred,
+    https://bioconductor.org/packages/release/bioc/html/SingleR.html
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.2
-Imports: 
-    dplyr,
-    SCINA,
-    scPred,
-    scSorter,
-    Seurat,
-    SingleR,
-    utils
-Remotes:
-    immunogenomics/harmony,
-    powellgenomicslab/scPred,
-    bioc::3.16/SingleR
+VignetteBuilder: knitr

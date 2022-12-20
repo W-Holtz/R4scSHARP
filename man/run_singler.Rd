@@ -9,9 +9,9 @@ run_singler(data, ref, ref_labels)
 \arguments{
 \item{data}{Gene expression matrix}
 
-\item{ref}{Refrence dataset for predictions}
+\item{ref}{Reference dataset for predictions}
 
-\item{ref_labels}{Labels of refrence dataset}
+\item{ref_labels}{Labels of reference dataset}
 }
 \value{
 Returns SingleR predictions as an R data frame

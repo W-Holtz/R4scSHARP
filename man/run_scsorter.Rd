@@ -11,7 +11,7 @@ run_scsorter(data, markers = NULL, ref = NULL)
 
 \item{markers}{Marker genes for cell classification}
 
-\item{ref}{Refrence dataset for predictions.}
+\item{ref}{Reference dataset for predictions.}
 }
 \value{
 Returns scSorter predictions as an R data frame

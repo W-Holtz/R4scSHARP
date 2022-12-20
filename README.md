@@ -22,5 +22,5 @@
   
 ### Contact:
   Emails: 
-  w_holtz@coloradocollege.edu,
+  willholtz2001@gmail.com,
   d_lewinsohn@coloradocollege.edu 

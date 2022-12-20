@@ -30,9 +30,9 @@ given amount are ignored (value is 0 by default)}
 
 \item{marker_names}{Names of the marker genes}
 
-\item{ref_path}{Path to refrence dataset for predictions}
+\item{ref_path}{Path to reference dataset for predictions}
 
-\item{ref_labels_path}{Path to refrence dataset labels}
+\item{ref_labels_path}{Path to reference dataset labels}
 }
 \value{
 Returns the tool predictions in a single R data frame object

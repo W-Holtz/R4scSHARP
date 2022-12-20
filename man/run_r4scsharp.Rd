@@ -6,10 +6,10 @@
 \usage{
 run_r4scsharp(
   data_path,
-  out_path,
   marker_path,
   ref_path,
   ref_label_path,
+  out_path = NULL,
   tools = "scina,scsorter,sctype,singler,scpred",
   min_cells = 0,
   min_feats = 0
@@ -19,17 +19,18 @@ run_r4scsharp(
 \item{data_path}{Path represented as a string to gene expression
 matrix (or DGE matrix) stored as csv.}
 
-\item{out_path}{Path represented as a string to desired location for
-the results to be saved.}
-
 \item{marker_path}{Path represented as a string to marker genes
 for cell classification}
 
-\item{ref_path}{Path represented as a string to refrence dataset
+\item{ref_path}{Path represented as a string to reference dataset
 for predictions}
 
-\item{ref_label_path}{Path represented as a string to refrence
+\item{ref_label_path}{Path represented as a string to reference
 dataset labels}
+
+\item{out_path}{Path represented as a string to desired location for
+the results to be saved. If no out_path parameter is given, no output
+file will be generated.}
 
 \item{tools}{Tools you would like to run (runs all tools by default).
 Example Inputs:  "scina,scpred,singler", "sctype"}

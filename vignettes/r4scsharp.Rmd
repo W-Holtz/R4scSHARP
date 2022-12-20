@@ -2,6 +2,7 @@
 title: "R4scSHARP"
 author: "W-Holtz"
 date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{R4scSHARP}
   %\VignetteEngine{knitr::rmarkdown}
@@ -23,14 +24,9 @@ The purpose of this document is primarily to get users acquainted with the tool 
 
 ## Setup
 
-To setup, one must first install and load the following packages.
+To setup, one must first install and load the package. More details on installation can be found on the GitHub repository here: https://github.com/W-Holtz/R4scSHARP#installation
 
 ```{r}
-# specify any repo here
-install.packages("devtools", repos = "http://cran.us.r-project.org")
-library(devtools)
-# the package is also available on CRAN, but doesn't install all dependencies
-install_github("W-Holtz/R4scSHARP", )
 library(R4scSHARP)
 ```
 
@@ -41,15 +37,16 @@ Lets run through a simple example with the tool.
 First let's setup our input variables.
 
 ```{r}
-data_path <- "splat_0.8/query_counts.csv.gz"
-out_path <- "output"
-marker_path <- "splat_0.8/markers.txt"
-ref_path <- "splat_0.8/ref_counts.csv.gz"
-ref_label_path <- "splat_0.8/ref_labels.csv"
+data_path <- "query_counts.csv.gz"
+marker_path <- "markers.txt"
+ref_path <- "ref_counts.csv.gz"
+ref_label_path <- "ref_labels.csv"
+
 ```
 
 The above variables are all of the required input parameters, but there are more parameters at our disposal then just paths:
 
+-   out_path: Path represented as a string to desired location for the results to be saved. If no out_path parameter is given, no output file will be generated.
 -   tools:  Tools you would like to run (runs all five tools by default). Example Inputs: "scina,scpred,singler", "sctype", or "scsorter"
 -   min_cells:  Filters data so cells with a sample size less then the given amount are ignored (value is 0 by default)
 -   min_feats:  Filters data so features with a sample size less then the given amount are ignored (value is 0 by default)
@@ -58,7 +55,7 @@ The above variables are all of the required input parameters, but there are more
 To run the tools, call the function:
 
 ```{r, include = FALSE}
-output <- run_r4scsharp(data_path, out_path, marker_path, ref_path,
+output <- run_r4scsharp(data_path, marker_path, ref_path,
     ref_label_path)
 ```
 

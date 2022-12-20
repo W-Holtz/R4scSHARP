@@ -2,10 +2,9 @@
 #'
 #' @param data Gene expression matrix
 #' @param markers Marker genes for cell classification
-#' @param ref Refrence dataset for predictions.
+#' @param ref Reference dataset for predictions.
 #'
 #' @return Returns Scina predictions as an R data frame
-#' @importFrom SCINA SCINA
 #' @importFrom Seurat GetAssayData
 #' @export
 run_scina <- function(data, markers = NULL, ref = NULL) {
@@ -16,7 +15,7 @@ run_scina <- function(data, markers = NULL, ref = NULL) {
   }
   print("Running SCINA")
   norm_counts <- GetAssayData(object = data, slot = "data")
-  results <- SCINA(norm_counts, markers, rm_overlap = FALSE)
+  results <- SCINA::SCINA(norm_counts, markers, rm_overlap = FALSE)
   scina_preds <- results$cell_labels
 
   scina_preds <- replace(scina_preds, scina_preds == "unknown", NA)
@@ -28,10 +27,9 @@ run_scina <- function(data, markers = NULL, ref = NULL) {
 #'
 #' @param data Gene expression matrix
 #' @param markers Marker genes for cell classification
-#' @param ref Refrence dataset for predictions.
+#' @param ref Reference dataset for predictions.
 #'
 #' @return Returns scSorter predictions as an R data frame
-#' @importFrom scSorter scSorter
 #' @importFrom Seurat GetAssayData VariableFeatures
 #' @export
 run_scsorter <- function(data, markers = NULL, ref = NULL) {
@@ -58,7 +56,7 @@ run_scsorter <- function(data, markers = NULL, ref = NULL) {
   expr <- as.matrix(GetAssayData(object = data, slot = "data"))
   expr <- expr[rownames(expr) %in% picked_genes, ]
 
-  rts <- scSorter(expr, anno)
+  rts <- scSorter::scSorter(expr, anno)
   scsort_preds <- rts$Pred_Type
   scsort_preds <- replace(scsort_preds, scsort_preds == "Unknown", NA)
 
@@ -69,7 +67,7 @@ run_scsorter <- function(data, markers = NULL, ref = NULL) {
 #'
 #' @param data Gene expression matrix
 #' @param markers Marker genes for cell classification
-#' @param ref Refrence dataset for predictions.
+#' @param ref Reference dataset for predictions.
 #'
 #' @return Returns scType predictions as an R data frame
 #' @importFrom Seurat GetAssayData VariableFeatures
@@ -107,16 +105,15 @@ run_sctype <- function(data, markers = NULL, ref = NULL) {
 #' Runs Singler
 #'
 #' @param data Gene expression matrix
-#' @param ref  Refrence dataset for predictions
-#' @param ref_labels Labels of refrence dataset
+#' @param ref  Reference dataset for predictions
+#' @param ref_labels Labels of reference dataset
 #'
 #' @return Returns SingleR predictions as an R data frame
 #' @importFrom Seurat GetAssayData
-#' @import SingleR
 #' @export
 run_singler <- function(data, ref, ref_labels) {
   norm_counts <- as.matrix(GetAssayData(object = data, slot = "data"))
-  results <- SingleR(norm_counts, as.matrix(ref@assays$RNA@data),
+  results <- SingleR::SingleR(norm_counts, as.matrix(ref@assays$RNA@data),
     ref_labels[, 1])
   return(results$pruned.labels)
 }
@@ -124,13 +121,12 @@ run_singler <- function(data, ref, ref_labels) {
 #' Runs scPred
 #'
 #' @param data Gene expression matrix
-#' @param ref Refrence dataset for predictions
-#' @param ref_labels Labels of refrence dataset
+#' @param ref Reference dataset for predictions
+#' @param ref_labels Labels of reference dataset
 #'
 #' @return Returns scPred predictions as an R data frame
 #' @importFrom Seurat GetAssayData FindVariableFeatures ScaleData
 #' RunPCA RunUMAP AddMetaData
-#' @import scPred
 #' @export
 run_scpred <- function(data, ref, ref_labels) {
   # can return "unassigned"
@@ -161,8 +157,8 @@ run_scpred <- function(data, ref, ref_labels) {
 #' given amount are ignored (value is 0 by default)
 #' @param markers Marker genes for cell classification
 #' @param marker_names Names of the marker genes
-#' @param ref_path Path to refrence dataset for predictions
-#' @param ref_labels_path Path to refrence dataset labels
+#' @param ref_path Path to reference dataset for predictions
+#' @param ref_labels_path Path to reference dataset labels
 #'
 #' @return Returns the tool predictions in a single R data frame object
 #' where the rows are cells, and the columns are tool prediction output values.
@@ -200,10 +196,24 @@ run_tools <- function(data_path, tools, min_cells, min_feats, markers = NULL,
   results_df <- data.frame(start = rep(0, ncol(x = data)))
   #print(row.names(data@assays$RNA@data))
   if ("scina" %in% tools) {
+    if (!requireNamespace("SCINA", quietly = TRUE)) {
+      message("ERROR: The package SCINA has not been installed! 
+        Please install that tool first, then try to run the program again.")
+      message("For more help with installation, please see 
+        https://github.com/W-Holtz/R4scSHARP#installation")
+    } else {
     results_df$scina <- run_scina(data, markers)
+    }
   }
   if ("scsorter" %in% tools) {
+    if (!requireNamespace("scSorter", quietly = TRUE)) {
+      message("ERROR: The package scSorter has not been installed! 
+        Please install that tool first, then try to run the program again.")
+      message("For more help with installation, please see 
+        https://github.com/W-Holtz/R4scSHARP#installation")
+    } else {
     results_df$scsorter <- run_scsorter(data, markers)
+    }
   }
   if ("sctype" %in% tools) {
     results_df$sctype <- run_sctype(data, markers)
@@ -216,10 +226,24 @@ run_tools <- function(data_path, tools, min_cells, min_feats, markers = NULL,
     ref <- NormalizeData(ref)
 
     if ("singler" %in% tools) {
+      if (!requireNamespace("SCINA", quietly = TRUE)) {
+      message("ERROR: The package SCINA has not been installed! 
+        Please install that tool first, then try to run the program again.")
+      message("For more help with installation, please see 
+        https://github.com/W-Holtz/R4scSHARP#installation")
+      } else {
       results_df$singler <- run_singler(data, ref, ref_labels)
+      }
     }
     if ("scpred" %in% tools) {
+      if (!requireNamespace("SCINA", quietly = TRUE)) {
+      message("ERROR: The package SCINA has not been installed! 
+        Please install that tool first, then try to run the program again.")
+      message("For more help with installation, please see 
+        https://github.com/W-Holtz/R4scSHARP#installation")
+      } else {
       results_df$scpred <- run_scpred(data, ref, ref_labels)
+      }
     }
 
   }
@@ -238,16 +262,17 @@ run_tools <- function(data_path, tools, min_cells, min_feats, markers = NULL,
 #' predictions using that information.
 #' @param data_path Path represented as a string to gene expression
 #' matrix (or DGE matrix) stored as csv.
-#' @param out_path Path represented as a string to desired location for
-#' the results to be saved.
 #' @param marker_path Path represented as a string to marker genes
 #' for cell classification
-#' @param ref_path Path represented as a string to refrence dataset
+#' @param ref_path Path represented as a string to reference dataset
 #' for predictions
-#' @param ref_label_path Path represented as a string to refrence
+#' @param ref_label_path Path represented as a string to reference
 #' dataset labels
+#' @param out_path Path represented as a string to desired location for
+#' the results to be saved. If no out_path parameter is given, no output
+#' file will be generated.
 #' @param tools Tools you would like to run (runs all tools by default).
-#'   Example Inputs:  "scina,scpred,singler", "sctype"
+#' Example Inputs:  "scina,scpred,singler", "sctype"
 #' @param min_cells Filters data so cells with a sample size less then the
 #' given amount are ignored (value is 0 by default)
 #' @param min_feats Filters data so features with a sample size less then the
@@ -260,8 +285,8 @@ run_tools <- function(data_path, tools, min_cells, min_feats, markers = NULL,
 #' @import Seurat
 #' @import dplyr
 #' @export
-run_r4scsharp <- function(data_path, out_path, marker_path,
-  ref_path, ref_label_path, tools = "scina,scsorter,sctype,singler,scpred",
+run_r4scsharp <- function(data_path, marker_path, ref_path, ref_label_path,
+  out_path = NULL, tools = "scina,scsorter,sctype,singler,scpred",
   min_cells = 0, min_feats = 0) {
 
   tools <- unlist(strsplit(tools, ","))
@@ -278,6 +303,8 @@ run_r4scsharp <- function(data_path, out_path, marker_path,
   print(ref_path)
   results <- run_tools(data_path, tools, min_cells, min_feats,
     markers, marker_names, ref_path, ref_label_path)
-  write.csv(results, out_path)
+  if (!is.null(out_path)) {
+    write.csv(results, out_path)
+  }
   return(results)
 }
