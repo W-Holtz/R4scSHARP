@@ -5,7 +5,7 @@ Authors@R: c(
     person("William", "Holtz", , "willholtz2001@gmail.com", role = c("aut", "cre")),
     person("Daniel", "Lewinsohn", role = "aut")
   )
-Description: scSHARP is a robust software package used to classify single
+Description: The package scSHARP is a robust software package used to classify single
     cells by cell type based on their transcriptomic profile generated
     from single-cell RNA sequencing.  Intended for use by technically
     savvy research biologists, but perhaps available to a less technically
