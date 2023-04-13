@@ -1,19 +1,15 @@
 Package: R4scSHARP
-Title: Supplementary R Tools for scSHARP
+Title: Supplementary Tools for scSHARP
 Version: 1.0.0
 Authors@R: c(
     person("William", "Holtz", , "willholtz2001@gmail.com", role = c("aut", "cre")),
-    person("Daniel", "Lewinsohn", role = "aut")
+    person("Daniel", "Lewinsohn", role = c("aut", "cph"))
   )
-Description: The package scSHARP is a robust software package used to classify single
-    cells by cell type based on their transcriptomic profile generated
-    from single-cell RNA sequencing.  Intended for use by technically
-    savvy research biologists, but perhaps available to a less technically
-    proficient audience, our tool will be built with ease of use in mind.
-    scSHARP would also serve as a research tool in its own right, helping
-    users interpret their classification results with helpful models and
-    figures. This document contains the nontechnical information andbuild_vignettes()
-    purpose of scSHARP.
+Description: A compilation of 5 single cell classification tools. 'R4scSHARP' is capable 
+    of running 5 different tools ('SCINA', 'scSorter', 'scPred', 'SingleR', and 'scType') 
+    on a single set of transcriptomic data, and creating a cell type profile generated 
+    from single-cell RNA sequencing. These results can be used by other programs to obtain
+    more accurate cell classifications.
 License: GPL (>= 3)
 URL: https://github.com/W-Holtz
 Imports: 
@@ -26,10 +22,12 @@ Suggests:
     SCINA,
     scSorter,
     scPred,
-    SingleR
+    SingleR,
 Additional_repositories: 
+    https://github.com/jcao89757/SCINA,
     https://github.com/powellgenomicslab/scPred,
-    https://bioconductor.org/packages/release/bioc/html/SingleR.html
+    https://bioconductor.org/packages/release/bioc/html/SingleR.html,
+    https://github.com/IanevskiAleksandr/sc-type
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.2

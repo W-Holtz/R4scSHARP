@@ -15,6 +15,36 @@
   library(R4scSHARP)
   ```
   We have plans to publish to CRAN soon (a week or so), so stay tuned!
+
+### Installing Suggested Packages:
+  Our package contains 4 suggested dependencies that need to be installed on their own.
+
+  #### SingleR:
+  Install this package with the command:
+  ```
+  if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+  BiocManager::install("SingleR")
+  ```
+
+  #### scSorter:
+  Install this package with the command:
+  ```
+  install.packages('scSorter')
+  ```
+
+  #### scPred:
+  Install this package with the command:
+  ```
+  devtools::install_github("immunogenomics/harmony")
+  devtools::install_github("powellgenomicslab/scPred")
+  ```
+
+  #### SCINA
+  ```
+  install.packages('SCINA')
+  ```
   
 ## Usage:
   More documentation is coming! For now, we've included an examples file containing an R script showcasing

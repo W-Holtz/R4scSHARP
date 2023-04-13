@@ -170,7 +170,6 @@ run_tools <- function(data_path, tools, min_cells, min_feats, markers = NULL,
   marker_names = NULL, ref_path = NULL, ref_labels_path = NULL) {
   # add ability to take in seurat counts object
 
-  #set.seed(25)
   counts <- read.csv(data_path, header = TRUE, row.names = 1)
   print(dim(counts))
   data <- CreateSeuratObject(t(counts), min.cells = min_cells,
@@ -191,10 +190,7 @@ run_tools <- function(data_path, tools, min_cells, min_feats, markers = NULL,
   names(markers) <- marker_names
 
   tools <- unlist(tools)
-  #markers <- list(Group1=c("Gene1","Gene3"), Group2=c("Gene2"))
-  #print(markers)
   results_df <- data.frame(start = rep(0, ncol(x = data)))
-  #print(row.names(data@assays$RNA@data))
   if ("scina" %in% tools) {
     if (!requireNamespace("SCINA", quietly = TRUE)) {
       message("ERROR: The package SCINA has not been installed! 
