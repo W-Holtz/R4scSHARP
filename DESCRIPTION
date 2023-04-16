@@ -14,20 +14,19 @@ License: GPL (>= 3)
 URL: https://github.com/W-Holtz
 Imports: 
     dplyr,
+    HGNChelper,
+    openxlsx,
     Seurat,
+    scales,
     utils
 Suggests:
     knitr,
     rmarkdown,
+Enhances:
     SCINA,
     scSorter,
     scPred,
-    SingleR,
-Additional_repositories: 
-    https://github.com/jcao89757/SCINA,
-    https://github.com/powellgenomicslab/scPred,
-    https://bioconductor.org/packages/release/bioc/html/SingleR.html,
-    https://github.com/IanevskiAleksandr/sc-type
+    SingleR
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.2
