@@ -1,6 +1,6 @@
 Package: R4scSHARP
 Title: Supplementary Tools for scSHARP
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("William", "Holtz", , "willholtz2001@gmail.com", role = c("aut", "cre")),
     person("Daniel", "Lewinsohn", role = c("aut", "cph"))
